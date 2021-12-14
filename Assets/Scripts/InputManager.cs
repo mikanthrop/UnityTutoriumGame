@@ -10,6 +10,8 @@ public class InputManager : MonoBehaviour
     //if player presses WASD
     public void OnMove(InputAction.CallbackContext _context)
     {
+        if (!player) return;
+
         Vector2 movementDirection = _context.ReadValue<Vector2>();
         player.ChangeMoveDirection(movementDirection);
         print("Movement Direction: " + movementDirection);
@@ -18,18 +20,32 @@ public class InputManager : MonoBehaviour
     //if player presses space
     public void OnDash(InputAction.CallbackContext _context)
     {
+        if (!player) return;
+
         if (_context.phase == InputActionPhase.Started)
         {
             player.Dash();
         }
     }
 
-    //if player presses E
+    //if player presses Shift
     public void OnFireball(InputAction.CallbackContext _context)
     {
+        if (!player) return;
+
         if (_context.phase == InputActionPhase.Started)
         {
             player.Fireball();
+        }
+    }
+
+    public void OnInteract(InputAction.CallbackContext _context)
+    {
+        if (!player) return;
+
+        if (_context.phase == InputActionPhase.Started)
+        {
+            player.Interact();
         }
     }
 }

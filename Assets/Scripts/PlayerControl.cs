@@ -14,6 +14,7 @@ public class PlayerControl : MonoBehaviour
     GameObject activeFireball;
     private bool canToss = true;
     private Vector2 moveDirection = Vector2.zero;
+    [SerializeField] private float interactionRadius = 2f;
 
 
     //gets referenced every frame
@@ -63,14 +64,27 @@ public class PlayerControl : MonoBehaviour
         canDash = true;
     }
 
+    //makes fireballs in the direction player is looking
     public void Fireball()
     {
-        if(activeFireball != null) return;
-       
+        if (activeFireball != null) return;
+
         activeFireball = Instantiate(fireball.gameObject, transform.position, Quaternion.identity);
         Vector3 dir = Vector3.zero;
         dir.x = anim.GetFloat("MovementHorizontal");
         dir.y = anim.GetFloat("MovementVertical");
         activeFireball.transform.right = dir;
+    }
+
+    public void Interact()
+    {
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, interactionRadius, moveDirection);
+        foreach (RaycastHit2D hit in hits)
+        {
+            Interactable isInteractable = hit.transform.GetComponent<Interactable>();
+            if (isInteractable != null) {
+                isInteractable.Interact(this);
+            }
+        }
     }
 }
